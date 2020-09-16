@@ -18,10 +18,11 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.nav_host_fragment)
 
-        fab.setOnClickListener{
+        fab.setOnClickListener {
             navController.navigate(R.id.action_remindersFragment_to_addReminderFragment)
         }
 
+        fadToggler()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -37,6 +38,16 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun fadToggler() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in arrayOf(R.id.addReminderFragment)) {
+                fab.hide()
+            } else {
+                fab.show()
+            }
         }
     }
 }
