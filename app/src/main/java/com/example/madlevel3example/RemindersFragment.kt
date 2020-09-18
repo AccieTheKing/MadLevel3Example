@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_reminders.*
@@ -42,6 +43,7 @@ class RemindersFragment : Fragment() {
             )
         )
         observeAddReminderResult()
+        createItemTouchHelper().attachToRecyclerView(rvReminders)
     }
 
     private fun observeAddReminderResult() {
@@ -53,5 +55,27 @@ class RemindersFragment : Fragment() {
                 reminderAdapter.notifyDataSetChanged()
             } ?: Log.e("ReminderFragment", "Request triggered, but empty reminder text!")
         }
+    }
+
+    private fun createItemTouchHelper(): ItemTouchHelper {
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            // ability to move up and down
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false;
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                reminders.removeAt(position)
+                reminderAdapter.notifyDataSetChanged()
+            }
+
+        }
+
+        return ItemTouchHelper(callback)
     }
 }
