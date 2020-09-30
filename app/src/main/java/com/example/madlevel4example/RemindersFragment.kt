@@ -19,9 +19,7 @@ import kotlinx.android.synthetic.main.fragment_reminders.*
 class RemindersFragment : Fragment() {
 
     private lateinit var reminderRepository: ReminderRepository
-
     private var reminders: ArrayList<Reminder> = arrayListOf()
-
     private lateinit var reminderAdapter: ReminderAdapter
 
     override fun onCreateView(
@@ -50,8 +48,10 @@ class RemindersFragment : Fragment() {
     }
 
     private fun initViews() {
-        rvReminders.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        reminderAdapter = ReminderAdapter(reminders)
         rvReminders.adapter = reminderAdapter
+        rvReminders.layoutManager = LinearLayoutManager(activity)
+
         rvReminders.addItemDecoration(
             DividerItemDecoration(
                 context,
